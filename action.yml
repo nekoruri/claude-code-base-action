@@ -92,13 +92,13 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # https://github.com/actions/setup-node/releases/tag/v4.4.0
       with:
-        node-version: "18.x"
+        node-version: "22.23.4"
         cache: ${{ inputs.use_node_cache == 'true' && 'npm' || '' }}
 
     - name: Install Bun
       uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # https://github.com/oven-sh/setup-bun/releases/tag/v2.0.2
       with:
-        bun-version: 1.2.11
+        bun-version: 1.4.4
 
     - name: Install Dependencies
       shell: bash
@@ -111,15 +111,15 @@ runs:
       run: |
         # Self-hosted runner対応: 徹底的なクリーンアップ
         npm uninstall -g @anthropic-ai/claude-code 2>/dev/null || true
-        
+
         # 残存ファイルを手動削除（self-hosted runnerで必要）
         NPM_GLOBAL_ROOT=$(npm root -g 2>/dev/null || echo "/usr/local/lib/node_modules")
         rm -rf "$NPM_GLOBAL_ROOT/@anthropic-ai/claude-code" 2>/dev/null || true
         rm -rf "$NPM_GLOBAL_ROOT/@anthropic-ai/.claude-code-"* 2>/dev/null || true
-        
+
         # npmキャッシュクリア
         npm cache clean --force 2>/dev/null || true
-        
+
         # forceオプション付きでインストール
         npm install -g @anthropic-ai/claude-code@1.0.2 --force
 
